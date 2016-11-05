@@ -4,8 +4,6 @@ var path = require('path');
 module.exports = {
   entry: {
     app: [
-      'webpack/hot/dev-server',
-      'webpack-hot-middleware/client',
       path.join(__dirname, 'src/app.js')
     ]
   },
@@ -17,16 +15,18 @@ module.exports = {
   plugins: [
     new webpack.optimize.OccurrenceOrderPlugin(),
     new webpack.NoErrorsPlugin(),
-    new webpack.HotModuleReplacementPlugin()
+    new webpack.DefinePlugin({
+      'process.env.NODE_ENV':JSON.stringify('production')
+    }),
+    new webpack.optimize.UglifyJsPlugin()
   ],
   module: {
     loaders: [{
       test: /\.js$/,
       include: [
-        path.join(__dirname, 'node_modules/enigma-minkiele'),
         path.join(__dirname, 'src')
       ],
-      loaders: ['react-hot', 'babel-loader', 'webpack-module-hot-accept']
+      loaders: ['babel-loader']
     }]
   }
 };
