@@ -1,5 +1,6 @@
 import React from 'react';
 import MatrixFormRow from './MatrixFormRow';
+import {DEFAULT_ROWS, DEFAULT_COLS} from '../Constants';
 
 export default class MatrixForm extends React.Component {
 
@@ -35,4 +36,9 @@ MatrixForm.propTypes = {
   rows: React.PropTypes.number.isRequired,
   cols: React.PropTypes.number.isRequired,
   eventManager: React.PropTypes.object.isRequired
+};
+
+MatrixForm.defaultProps = {
+  rows: DEFAULT_ROWS,
+  cols: DEFAULT_COLS
 };
