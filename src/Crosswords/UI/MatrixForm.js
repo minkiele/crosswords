@@ -1,12 +1,9 @@
 import React from 'react';
 import MatrixFormRow from './MatrixFormRow';
+import Matrix from '../Math/Matrix';
 import {DEFAULT_ROWS, DEFAULT_COLS} from '../Constants';
 
 export default class MatrixForm extends React.Component {
-
-  constructor (props) {
-    super(props);
-  }
 
   render () {
 
@@ -14,7 +11,7 @@ export default class MatrixForm extends React.Component {
 
     for(let row = 0; row < this.props.rows; row += 1) {
       rows.push(
-        <MatrixFormRow key={row.toString()} row={row} cols={this.props.cols} eventManager={this.props.eventManager} />
+        <MatrixFormRow key={row.toString()} row={row} cols={this.props.cols} matrixRow={this.props.matrix.getRow(row)} eventManager={this.props.eventManager} />
       );
     }
 
@@ -35,6 +32,7 @@ export default class MatrixForm extends React.Component {
 MatrixForm.propTypes = {
   rows: React.PropTypes.number.isRequired,
   cols: React.PropTypes.number.isRequired,
+  matrix: React.PropTypes.instanceOf(Matrix).isRequired,
   eventManager: React.PropTypes.object.isRequired
 };
 
