@@ -14,10 +14,22 @@ export default class MatrixFormCell extends React.Component {
     return this.props.matrixCol === false ? 'black' : '';
   }
 
+  renderDefinition () {
+    let coord = `${this.props.row}${this.props.col}`;
+    if(typeof this.props.definitions[coord] === 'number') {
+      return (
+        <span className="definition">{this.props.definitions[coord]}</span>
+      );
+    } else {
+      return '';
+    }
+  }
+  
   render () {
 
     return (
       <td onDoubleClick={() => { this.toggleBlackStatus(); }} className={this.getCellClassName()}>
+        {this.renderDefinition()}
         <input type="text" cols="2" onChange={(evt) => { this.updateColValue(evt.target.value); }} value={this.props.matrixCol} />
       </td>
     );
@@ -26,7 +38,6 @@ export default class MatrixFormCell extends React.Component {
 }
 
 MatrixFormCell.propTypes = {
-  eventManager: React.PropTypes.object.isRequired,
   row: React.PropTypes.number.isRequired,
   col: React.PropTypes.number.isRequired,
   matrixCol: React.PropTypes.oneOfType([
@@ -34,4 +45,6 @@ MatrixFormCell.propTypes = {
     React.PropTypes.number,
     React.PropTypes.bool
   ]).isRequired,
+  definitions: React.PropTypes.object.isRequired,
+  eventManager: React.PropTypes.object.isRequired
 };

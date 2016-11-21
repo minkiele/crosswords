@@ -54,12 +54,64 @@ export default class Crosswords {
 
   }
 
-  getEventManager () {
-    return this.eventManager;
+  isDefinitionEligible(row, col) {
+    let cellValue = this.matrix.getCellValue(row, col);
+    if(cellValue === false) {
+      //Black cell, no number
+      return false;
+    } else if(row === 0 || col === 0) {
+      //No black cell, check if is along left/top borders
+      return true;
+    } else {
+      //Check for black cells above (vertical)
+      let cellAbove = this.matrix.getCellValue(row - 1, col);
+      if(cellAbove === false) {
+        //Check if there is at least a cell below
+        if(row < this.rows - 1) {
+          //If that's the case check that the cell isn't black
+          let cellBelow = this.matrix.getCellValue(row + 1, col);
+          if(cellBelow !== false) {
+            return true;
+          }
+        }
+      }
+      //Check for black cells before (horizontal)
+      let cellBefore = this.matrix.getCellValue(row, col - 1);
+      if(cellBefore === false) {
+        //Check if there is at least a cell after
+        if(col < this.cols - 1) {
+          //If that's the case check that the cell isn't black
+          let cellAfter = this.matrix.getCellValue(row, col + 1);
+          if(cellAfter !== false) {
+            return true;
+          }
+        }
+      }
+      //All other cases
+      return false;
+    }
+  }
+  
+  getDefinitionCoords() {
+
+    let coords = {};
+    let definition = 0;
+
+    for(let i = 0; i < this.rows; i += 1){
+      for(let j = 0; j < this.cols; j += 1){
+        if(this.isDefinitionEligible(i, j)) {
+            definition += 1;
+            coords[`${i}${j}`] = definition;
+        }
+      }
+    }
+    
+    return coords;
+    
   }
 
   render () {
-    ReactDOM.render(<CrosswordsUI rows={this.rows} cols={this.cols} matrix={this.matrix} eventManager={this.eventManager} />, this.container);
+    ReactDOM.render(<CrosswordsUI rows={this.rows} cols={this.cols} matrix={this.matrix} definitions={this.getDefinitionCoords()} eventManager={this.eventManager} />, this.container);
   }
 
 }

@@ -11,7 +11,7 @@ export default class MatrixForm extends React.Component {
 
     for(let row = 0; row < this.props.rows; row += 1) {
       rows.push(
-        <MatrixFormRow key={row.toString()} row={row} cols={this.props.cols} matrixRow={this.props.matrix.getRow(row)} eventManager={this.props.eventManager} />
+        <MatrixFormRow key={row.toString()} row={row} cols={this.props.cols} matrixRow={this.props.matrix.getRow(row)} definitions={this.props.definitions} eventManager={this.props.eventManager} />
       );
     }
 
@@ -33,6 +33,7 @@ MatrixForm.propTypes = {
   rows: React.PropTypes.number.isRequired,
   cols: React.PropTypes.number.isRequired,
   matrix: React.PropTypes.instanceOf(Matrix).isRequired,
+  definitions: React.PropTypes.object.isRequired,
   eventManager: React.PropTypes.object.isRequired
 };
 

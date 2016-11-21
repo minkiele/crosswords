@@ -3,6 +3,7 @@
   <head>
     <title>Crosswords</title>
     <style type="text/css">
+
       input[type="text"] {
         width: 50px;
       }
@@ -11,6 +12,17 @@
       }
       td.black > input {
         display: none;
+      }
+      td {
+        position: relative;
+      }
+      
+      td > .definition {
+        position: absolute;
+        top: 0;
+        left: 0;
+        background-color: #fff;
+        font-size: 10px;
       }
     </style>
   </head>
