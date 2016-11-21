@@ -101,7 +101,7 @@ export default class Crosswords {
       for(let j = 0; j < this.cols; j += 1){
         if(this.isDefinitionEligible(i, j)) {
             definition += 1;
-            coords[`${i}${j}`] = definition;
+            coords[`${i}-${j}`] = definition;
         }
       }
     }

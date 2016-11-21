@@ -15,7 +15,7 @@ export default class MatrixFormCell extends React.Component {
   }
 
   renderDefinition () {
-    let coord = `${this.props.row}${this.props.col}`;
+    let coord = `${this.props.row}-${this.props.col}`;
     if(typeof this.props.definitions[coord] === 'number') {
       return (
         <span className="definition">{this.props.definitions[coord]}</span>
