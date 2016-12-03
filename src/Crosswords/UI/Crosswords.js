@@ -3,6 +3,7 @@ import MatrixSizeForm from './MatrixSizeForm';
 import MatrixForm from './MatrixForm';
 import {DEFAULT_ROWS, DEFAULT_COLS} from '../Constants';
 import Matrix from '../Math/Matrix';
+import DefinitionsList from './DefinitionsList';
 
 export default class Crosswords extends React.Component {
 
@@ -11,6 +12,14 @@ export default class Crosswords extends React.Component {
       <div className="container">
         <MatrixSizeForm rows={this.props.rows} cols={this.props.cols} eventManager={this.props.eventManager} />
         <MatrixForm {...this.props} />
+        <section>
+          <h2>Horizontal</h2>
+          <DefinitionsList definitions={this.props.definitions.horizontal} eventManager={this.props.eventManager} />
+        </section>
+        <section>
+          <h2>Vertical</h2>
+          <DefinitionsList definitions={this.props.definitions.vertical} eventManager={this.props.eventManager} />
+        </section>
       </div>
     );
   }

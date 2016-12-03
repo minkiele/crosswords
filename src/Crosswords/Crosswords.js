@@ -54,30 +54,16 @@ export default class Crosswords {
 
   }
 
-  isDefinitionEligible(row, col) {
+  //Very similar, check if
+  isHorizontalDefinitionEligible(row, col) {
     let cellValue = this.matrix.getCellValue(row, col);
     if(cellValue === false) {
       //Black cell, no number
       return false;
-    } else if(row === 0 || col === 0) {
-      //No black cell, check if is along left/top borders
-      return true;
     } else {
-      //Check for black cells above (vertical)
-      let cellAbove = this.matrix.getCellValue(row - 1, col);
-      if(cellAbove === false) {
-        //Check if there is at least a cell below
-        if(row < this.rows - 1) {
-          //If that's the case check that the cell isn't black
-          let cellBelow = this.matrix.getCellValue(row + 1, col);
-          if(cellBelow !== false) {
-            return true;
-          }
-        }
-      }
-      //Check for black cells before (horizontal)
-      let cellBefore = this.matrix.getCellValue(row, col - 1);
-      if(cellBefore === false) {
+      //Test if there can be a definition on that row
+      let testCellAfter = col === 0 || this.matrix.getCellValue(row, col - 1) === false;
+      if(testCellAfter) {
         //Check if there is at least a cell after
         if(col < this.cols - 1) {
           //If that's the case check that the cell isn't black
@@ -91,27 +77,75 @@ export default class Crosswords {
       return false;
     }
   }
-  
-  getDefinitionCoords() {
+
+  isVerticalDefinitionEligible(row, col) {
+    let cellValue = this.matrix.getCellValue(row, col);
+    if(cellValue === false) {
+      //Black cell, no number
+      return false;
+    } else {
+      //Test if there can be a definition on that row
+      let testCellBelow = row === 0 || this.matrix.getCellValue(row - 1, col) === false;
+      if(testCellBelow) {
+        //Check if there is at least a cell below
+        if(row < this.rows - 1) {
+          //If that's the case check that the cell isn't black
+          let cellBelow = this.matrix.getCellValue(row + 1, col);
+          if(cellBelow !== false) {
+            return true;
+          }
+        }
+      }
+      //All other cases
+      return false;
+    }
+  }
+
+  getDefinitionEligibility (row, col) {
+    return {
+      h: this.isHorizontalDefinitionEligible(row, col),
+      v: this.isVerticalDefinitionEligible(row, col)
+    };
+  }
+
+  isDefinitionEligible(row, col) {
+    let eligibility = this.getDefinitionEligibility(row, col);
+    return eligibility.h || eligibility.v;
+  }
+
+  getDefinitionData() {
 
     let coords = {};
+    let horizontal = [];
+    let vertical = [];
     let definition = 0;
 
     for(let i = 0; i < this.rows; i += 1){
       for(let j = 0; j < this.cols; j += 1){
-        if(this.isDefinitionEligible(i, j)) {
+        let eligibility = this.getDefinitionEligibility(i, j);
+        if(eligibility.h || eligibility.v) {
             definition += 1;
             coords[`${i}-${j}`] = definition;
+            if(eligibility.h) {
+              horizontal.push(definition);
+            }
+            if(eligibility.v) {
+              vertical.push(definition);
+            }
         }
       }
     }
-    
-    return coords;
-    
+
+    return {
+      coords: coords,
+      horizontal: horizontal,
+      vertical: vertical
+    };
+
   }
 
   render () {
-    ReactDOM.render(<CrosswordsUI rows={this.rows} cols={this.cols} matrix={this.matrix} definitions={this.getDefinitionCoords()} eventManager={this.eventManager} />, this.container);
+    ReactDOM.render(<CrosswordsUI rows={this.rows} cols={this.cols} matrix={this.matrix} definitions={this.getDefinitionData()} eventManager={this.eventManager} />, this.container);
   }
 
 }
